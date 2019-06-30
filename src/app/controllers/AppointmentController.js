@@ -47,9 +47,6 @@ class AppointmentController {
 
     const { provider_id, date } = req.body;
 
-    /**
-     * Check if provider_id is a provider
-     */
     const checkIsProvider = await User.findOne({
       where: { id: provider_id, provider: true },
     });
@@ -60,18 +57,13 @@ class AppointmentController {
         .json({ error: 'You can only create appointments with providers' });
     }
 
-    /**
-     * Check for past dates
-     */
     const hourStart = startOfHour(parseISO(date));
 
     if (isBefore(hourStart, new Date())) {
       return res.status(400).json({ error: 'Past dates are not permitted' });
     }
 
-    /**
-     * Check date availability
-     */
+
     const checkAvailability = await Appointment.findOne({
       where: {
         provider_id,
