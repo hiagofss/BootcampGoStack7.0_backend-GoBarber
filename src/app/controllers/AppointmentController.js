@@ -5,8 +5,9 @@ import User from '../models/User';
 import File from '../models/File';
 import Appointment from '../models/Appointment';
 import Notification from '../schemas/Notification';
+
+import CancellationMail from '../jobs/CancellationMail';
 import Queue from '../../lib/Queue';
-import CancellationJob from '../jobs/CancellationMail';
 
 class AppointmentController {
   async index(req, res) {
@@ -126,7 +127,7 @@ class AppointmentController {
 
     if (isBefore(dateWithSub, new Date())) {
       return res.status(401).json({
-        error: 'You can oly cancel appointments 2 hous is advance.',
+        error: 'You can only cancel appointments 2 hours in advance.',
       });
     }
 
@@ -134,7 +135,7 @@ class AppointmentController {
 
     await appointment.save();
 
-    await Queue.add(CancellationJob.key, {
+    await Queue.add(CancellationMail.key, {
       appointment,
     });
 
