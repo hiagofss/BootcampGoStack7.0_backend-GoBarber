@@ -1,0 +1,30 @@
+version: '3.3'
+volumes:
+  data:
+services:
+  postgres:
+    image: postgres:11.1-alpine
+    restart: always
+    container_name: gobarber-postgres
+    working_dir: /application
+    volumes:
+      - .:/application
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=app
+    ports:
+      - '9094:5432'
+  mongo:
+    image: mongo
+    restart: always
+    # environment:
+    #   MONGO_INITDB_ROOT_USERNAME: root
+    #   MONGO_INITDB_ROOT_PASSWORD: example
+  redis:
+    image: redis:alpine
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025
+      - 8025:8025
