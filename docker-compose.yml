@@ -8,7 +8,7 @@ services:
     container_name: gobarber-postgres
     working_dir: /application
     volumes:
-      - .:/application
+      - ./data:/var/lib/postgresql/data
     environment:
       - POSTGRES_USER=root
       - POSTGRES_PASSWORD=root
